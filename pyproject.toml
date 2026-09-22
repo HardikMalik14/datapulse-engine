@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datapulse-engine"
+version = "1.0.0"
+description = "Enterprise-grade modular data preprocessing, feature engineering and pipeline framework for tabular ML."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["machine-learning", "feature-engineering", "preprocessing", "mlops", "scikit-learn"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "scikit-learn>=1.3",
+    "pydantic>=2.5",
+    "joblib>=1.3",
+    "imbalanced-learn>=0.11",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "pytest-cov>=4.1", "ruff>=0.5", "mypy>=1.8"]
+
+[tool.setuptools.packages.find]
+include = ["datapulse*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+# Our own deprecation debt is a hard failure; upstream libraries' is not,
+# so CI stays green across the Python / scikit-learn matrix.
+filterwarnings = [
+    "error::FutureWarning",
+    "ignore::FutureWarning:sklearn.*",
+    "ignore::FutureWarning:pandas.*",
+    "ignore::FutureWarning:imblearn.*",
+    "ignore::FutureWarning:numpy.*",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "D", "UP", "B", "ANN", "SIM"]
+ignore = ["D203", "D213", "ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "ANN"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
