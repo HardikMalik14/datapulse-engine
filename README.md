@@ -325,4 +325,4 @@ The suite is organised by the property it defends. The `TestLeakageGuards` class
 
 ## License
 
-MIT.
+Copyright (c) 2026 Hardik Malik
