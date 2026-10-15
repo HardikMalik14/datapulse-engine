@@ -295,7 +295,8 @@ class CategoricalEncoderPipeline(AbstractTransformer):
                 sparse_output=False,
                 dtype=np.float64,
             )
-            block = X[self.one_hot_columns_].astype("object").fillna("__NA__")
+            block = X[self.one_hot_columns_].astype("object")
+            block = block.where(block.notna(), "__NA__").infer_objects(copy=False)
             self.one_hot_encoder_.fit(block)
             raw_names = self.one_hot_encoder_.get_feature_names_out(self.one_hot_columns_)
             self.one_hot_names_ = ensure_unique_columns(
@@ -347,7 +348,8 @@ class CategoricalEncoderPipeline(AbstractTransformer):
             pieces.append(X[passthrough].astype("float64"))
 
         if self.one_hot_encoder_ is not None:
-            block = X.reindex(columns=self.one_hot_columns_).astype("object").fillna("__NA__")
+            block = X.reindex(columns=self.one_hot_columns_).astype("object")
+            block = block.where(block.notna(), "__NA__").infer_objects(copy=False)
             encoded = self.one_hot_encoder_.transform(block)
             pieces.append(
                 pd.DataFrame(encoded, columns=self.one_hot_names_, index=X.index)

@@ -326,3 +326,14 @@ The suite is organised by the property it defends. The `TestLeakageGuards` class
 ## License
 
 Copyright (c) 2026 Hardik Malik
+
+
+## Interactive Vercel pipeline lab
+
+The original repository now includes a live preprocessing interface: synthetic data or CSV upload, configurable imputation/outliers/scaling/selection/resampling, before-and-after previews, stage diagnostics and drift auditing. Export a ZIP containing processed training/holdout data, a fitted inference pipeline and metadata. No downstream prediction model is trained by the website.
+
+Import **HardikMalik14/datapulse-engine** on Vercel with Framework **FastAPI**, root directory `./`, no environment variables, and default build/install/output settings. Python 3.12 and entrypoint `index:app` are configured in the repository. Full steps: [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md).
+
+Local web app: `pip install -r requirements.txt`, then `uvicorn index:app --reload`. The original CLI `main.py`, package layout and reporting features remain available. Runtime dependencies are pinned to the tested deployment environment.
+
+The web adapter fits on the training split, transforms holdout with fitted parameters, and keeps resampling training-only. Uploaded data uses a seeded random split (stratified for classification), not a chronological production-drift comparison. Synthetic data can contain deliberate holdout shifts. The demo is limited to 1,200 input rows.
